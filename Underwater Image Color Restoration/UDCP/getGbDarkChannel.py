@@ -2,33 +2,38 @@ import numpy as np
 
 
 def getMinChannel(img):
-	imgGray = np.zeros((img.shape[0],img.shape[1]),'float32')
-	for i in range(0,img.shape[0]):
-		for j in range(0,img.shape[1]):
-			localMin = 255
-			for k in range(0,2):
-				if img.item((i,j,k)) < localMin:
-					localMin = img.item((i,j,k))
-			imgGray[i,j] = localMin
-	return imgGray
+	# 输入检查
+    if len(img.shape) == 3 and img.shape[2] == 3:
+        pass
+    else:
+        print("bad image shape, input must be color image")
+        return None
+    imgGray = img[:,:,1:3].min(axis=2) # R G B 中只考虑G B两个颜色通道 
+
+    return imgGray
 
 def getDarkChannel(img, blockSize):
     img = getMinChannel(img)
+
+    # blockSize检查
+    if blockSize % 2 == 0 or blockSize < 3:
+        print('blockSize is not odd or too small')
+        return None
+    
+    # 计算addSize
     addSize = int((blockSize - 1) / 2)
     newHeight = img.shape[0] + blockSize - 1
     newWidth = img.shape[1] + blockSize - 1
+
     # 中间结果
     imgMiddle = np.zeros((newHeight, newWidth))
     imgMiddle[:, :] = 255
     imgMiddle[addSize:newHeight - addSize, addSize:newWidth - addSize] = img
-    # print('imgMiddle',imgMiddle)
     imgDark = np.zeros((img.shape[0], img.shape[1]), np.uint8)
-    for i in range(addSize, newHeight - addSize):
-        for j in range(addSize, newWidth - addSize):
-            localMin = 255
-            for k in range(i - addSize, i + addSize + 1):
-                for l in range(j - addSize, j + addSize + 1):
-                    if imgMiddle.item((k, l)) < localMin:
-                        localMin = imgMiddle.item((k, l))
-            imgDark[i - addSize, j - addSize] = localMin
+    
+    # 计算每个block中最小值
+    for i in range(img.shape[0]):
+        for j in range(img.shape[1]):
+            imgDark[i,j] = imgMiddle[i:i+blockSize, j:j+blockSize].min()
+   
     return imgDark

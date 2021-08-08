@@ -4,7 +4,7 @@ def getMinChannel(img,AtomsphericLight):
     for i in range(0, img.shape[0]):
         for j in range(0, img.shape[1]):
             localMin = 1
-            for k in range(0, 2):
+            for k in range(1, 3): # R G B只考虑G B
                 imgNormalization = img.item((i, j, k)) / AtomsphericLight[k]
                 if imgNormalization < localMin:
                     localMin = imgNormalization
