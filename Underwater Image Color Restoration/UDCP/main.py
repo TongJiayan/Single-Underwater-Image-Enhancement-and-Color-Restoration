@@ -52,8 +52,8 @@ def run(args):
                 print("Fail to recover " + image_name + "!")
             else:
                 save_path = os.path.join("OutputImages", args.dataset)
-                output_image = image_name.split('.')[0] + '_DCP.jpg'
-                output_depth = image_name.split('.')[0] + '_DCP_TM.jpg'
+                output_image = image_name.split('.')[0] + '_UDCP.jpg'
+                output_depth = image_name.split('.')[0] + '_UDCP_TM.jpg'
 
                 cv2.imwrite(os.path.join(save_path, output_depth), np.uint8(transmission * 255))
 

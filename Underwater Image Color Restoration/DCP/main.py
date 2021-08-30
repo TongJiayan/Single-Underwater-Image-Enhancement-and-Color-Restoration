@@ -198,7 +198,7 @@ def run(args):
 if __name__=='__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--score', default='score.log', help='score log')
-    parser.add_argument('--dataset', default='SQUID', help='Input image directory')
+    parser.add_argument('--dataset', default='colorset', help='Input image directory')
     args = parser.parse_args()
     run(args)
 
